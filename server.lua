@@ -6,10 +6,13 @@ MySQL.ready(function()
 end)
 
 -- Lấy trạng thái xe
-lib.callback.register('vehicle:getUpgradeStatus', function(source, plate)
+ESX.RegisterServerCallback('vehicle:getUpgradeStatus', function(source, cb, plate)
     local result = MySQL.Sync.fetchAll('SELECT * FROM vehicle_upgrades WHERE plate = @plate', { ['@plate'] = plate })
-    if result[1] then return result[1]
-    else return { engine_level = 0, brake_level = 0, suspension_level = 0, primary_color = 0, secondary_color = 0, plate_color = 0, headlight_level = 0, turbo = 0, horn = -1, pearlescent = -1 } end
+    if result[1] then
+        cb(result[1])
+    else
+        cb({ engine_level = 0, brake_level = 0, suspension_level = 0, primary_color = 0, secondary_color = 0, plate_color = 0, headlight_level = 0, turbo = 0, horn = -1, pearlescent = -1 })
+    end
 end)
 
 -- Nâng cấp phương tiện
